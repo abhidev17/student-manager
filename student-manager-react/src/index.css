@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-slate-900 text-slate-100 font-sans antialiased;
+  background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 100%);
+}
+
+/* Smooth transitions for interactive elements */
+button,
+input,
+textarea {
+  @apply transition-all duration-200;
+}
+
+input::placeholder {
+  @apply text-slate-400;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-600 rounded-full hover:bg-slate-500;
+}
