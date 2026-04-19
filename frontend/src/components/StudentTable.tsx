@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { Edit2, Trash2, ChevronDown } from 'lucide-react';
-import { Card } from './common/Card';
 import Badge from './common/Badge';
 import { formatGPA, getInitials, getAvatarColor } from '../utils/formatters';
 import type { Student } from '../types';
@@ -97,28 +96,40 @@ export const StudentTable = ({
 
   if (loading) {
     return (
-      <Card className="p-8">
+      <div className="bg-white/[0.03] backdrop-blur-[8px] border border-white/8 rounded-xl p-8">
         <div className="flex items-center justify-center">
-          <div className="w-8 h-8 border-4 border-slate-200 border-t-sky-500 rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-gray-600 border-t-blue-500 rounded-full animate-spin" />
         </div>
-      </Card>
+      </div>
     );
   }
 
   if (sortedStudents.length === 0) {
     return (
-      <Card className="p-12 text-center">
-        <p className="text-slate-500 dark:text-slate-400 mb-2">
-          {filteredStudents.length === 0 && searchTerm
-            ? 'No students match your search'
-            : 'No students yet. Add one to get started!'}
-        </p>
-      </Card>
+      <div className="bg-white/[0.03] backdrop-blur-[8px] border border-white/8 rounded-xl p-12">
+        <div className="flex flex-col items-center justify-center py-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-white/5 mb-6">
+            <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 12c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3m6 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3M6 12c1.657 0 3-1.343 3-3S7.657 6 6 6s-3 1.343-3 3 1.343 3 3 3m0 6c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3m12 0c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3m-6 0c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-white mb-1">
+            {filteredStudents.length === 0 && searchTerm
+              ? 'No matches found'
+              : 'No students yet'}
+          </h3>
+          <p className="text-sm text-gray-400 mb-6">
+            {filteredStudents.length === 0 && searchTerm
+              ? 'Try adjusting your search or filters'
+              : 'Add your first student to get started'}
+          </p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="overflow-hidden">
+    <div className="bg-white/[0.03] backdrop-blur-[8px] border border-white/8 rounded-xl overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
@@ -225,7 +236,7 @@ export const StudentTable = ({
           </tbody>
         </table>
       </div>
-    </Card>
+    </div>
   );
 };
 

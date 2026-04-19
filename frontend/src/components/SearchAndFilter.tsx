@@ -1,7 +1,5 @@
 import { Search, X } from 'lucide-react';
-import { Chip } from './common/Card';
 import Input from './common/Input';
-import { Card } from './common/Card';
 
 interface SearchAndFilterProps {
   onSearchChange: (term: string) => void;
@@ -32,7 +30,7 @@ export const SearchAndFilter = ({
   const hasActiveFilters = searchTerm || selectedCourse || selectedAgeGroup !== 'all';
 
   return (
-    <Card variant="premium" className="p-6 mb-8">
+    <div className="bg-white/[0.03] backdrop-blur-[8px] border border-white/8 rounded-xl p-7">
       <div className="space-y-6">
         
         {/* Search Input */}
@@ -47,45 +45,61 @@ export const SearchAndFilter = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Filters Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           
           {/* Course Filter */}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
-              Filter by Course
-            </label>
-            <div className="flex gap-2 flex-wrap">
-              <Chip
-                label="All Courses"
-                isActive={!selectedCourse}
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-4">
+              Course
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <button
                 onClick={() => onCourseChange(null)}
-              />
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+                  !selectedCourse
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-white/8 text-gray-300 hover:bg-white/12'
+                }`}
+              >
+                All
+              </button>
               {availableCourses.map((course) => (
-                <Chip
+                <button
                   key={course}
-                  label={course}
-                  isActive={selectedCourse === course}
                   onClick={() => onCourseChange(selectedCourse === course ? null : course)}
-                />
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+                    selectedCourse === course
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-white/8 text-gray-300 hover:bg-white/12'
+                  }`}
+                >
+                  {course.length > 15 ? course.substring(0, 12) + '...' : course}
+                </button>
               ))}
             </div>
           </div>
 
           {/* Age Group Filter */}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
-              Filter by Age Group
-            </label>
-            <div className="flex gap-2 flex-wrap">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-4">
+              Age Group
+            </p>
+            <div className="flex flex-wrap gap-2">
               {AGE_GROUPS.map((group) => (
-                <Chip
+                <button
                   key={group.id}
-                  label={group.label}
-                  isActive={selectedAgeGroup === (group.id as any)}
                   onClick={() =>
                     onAgeGroupChange(selectedAgeGroup === group.id ? 'all' : (group.id as any))
                   }
-                />
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+                    selectedAgeGroup === group.id
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-white/8 text-gray-300 hover:bg-white/12'
+                  }`}
+                >
+                  {group.label}
+                </button>
               ))}
             </div>
           </div>
@@ -99,14 +113,14 @@ export const SearchAndFilter = ({
               onCourseChange(null);
               onAgeGroupChange('all');
             }}
-            className="text-sm font-medium text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 flex items-center gap-2 px-4 py-2 bg-sky-50 dark:bg-sky-900/20 rounded-lg transition-colors"
+            className="text-xs font-medium text-gray-400 hover:text-gray-300 flex items-center gap-2 px-3 py-1.5 transition-colors"
           >
-            <X size={16} />
-            Clear all filters
+            <X size={14} />
+            Clear filters
           </button>
         )}
       </div>
-    </Card>
+    </div>
   );
 };
 
