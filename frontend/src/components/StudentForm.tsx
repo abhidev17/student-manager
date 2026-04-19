@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Plus, Edit2, Loader, AlertCircle, X } from "lucide-react";
 import type { Student } from "../types";
-import validationLimits from "../constants/validationLimits.json";
 
 const COURSES = [
   "Computer Science",
@@ -22,12 +21,10 @@ interface Props {
   onCancelEdit: () => void;
 }
 
-const MAX_NAME = validationLimits.maxNameLength;
-const MAX_COURSE = validationLimits.maxCourseLength;
-const MIN_AGE = validationLimits.minAge;
-const MAX_AGE = validationLimits.maxAge;
-const MIN_GPA = validationLimits.minGpa;
-const MAX_GPA = validationLimits.maxGpa;
+const MAX_NAME = 50;
+const MAX_COURSE = 60;
+const MIN_AGE = 16;
+const MAX_AGE = 60;
 
 export default function StudentForm({ addOrUpdate, editing, onCancelEdit }: Props) {
   const [name, setName] = useState("");
@@ -67,8 +64,8 @@ export default function StudentForm({ addOrUpdate, editing, onCancelEdit }: Prop
       e.age = `Age must be ${MIN_AGE}-${MAX_AGE}`;
     if (!effectiveCourse.trim()) e.course = "Course is required";
     else if (effectiveCourse.trim().length > MAX_COURSE) e.course = `Max ${MAX_COURSE} characters`;
-    if (gpa !== "" && (Number(gpa) < MIN_GPA || Number(gpa) > MAX_GPA))
-      e.gpa = `GPA must be ${MIN_GPA.toFixed(1)}-${MAX_GPA.toFixed(1)}`;
+    if (gpa !== "" && (Number(gpa) < 0 || Number(gpa) > 4))
+      e.gpa = "GPA must be 0.0-4.0";
     return e;
   };
 
@@ -246,8 +243,8 @@ export default function StudentForm({ addOrUpdate, editing, onCancelEdit }: Prop
                 setErrors((p) => ({ ...p, gpa: "" }));
               }}
               placeholder="0.0 - 4.0"
-              min={MIN_GPA}
-              max={MAX_GPA}
+              min={0}
+              max={4}
               step={0.01}
               disabled={isLoading}
               className={inputCls("gpa")}

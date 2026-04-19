@@ -65,16 +65,17 @@ export default function StatsPanel({ students }: Props) {
         {metricCard(<Users size={14} />, "Total", String(students.length), "students enrolled")}
         {stats?.avgGpa
           ? metricCard(<TrendingUp size={14} />, "Avg GPA", stats.avgGpa, "across all students")
-          : metricCard(<TrendingUp size={14} />, "Avg GPA", "-", "no GPA data yet")}
+          : metricCard(<TrendingUp size={14} />, "Avg GPA", "—", "no GPA data yet")}
         {metricCard(<BookOpen size={14} />, "Courses", String(stats?.sortedCourses.length ?? 0), "unique courses")}
         {metricCard(
           <Award size={14} />,
           "Top GPA",
-          stats?.topGpa?.gpa?.toFixed(2) ?? "-",
+          stats?.topGpa?.gpa?.toFixed(2) ?? "—",
           stats?.topGpa?.name
         )}
       </div>
 
+      {/* Course distribution */}
       {stats && stats.sortedCourses.length > 0 && (
         <div>
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">
@@ -86,7 +87,7 @@ export default function StatsPanel({ students }: Props) {
                 <div className="flex justify-between text-xs mb-1">
                   <span className="text-slate-600 truncate max-w-[160px]">{course}</span>
                   <span className="text-slate-400 ml-2 flex-shrink-0">
-                    {count} - {Math.round((count / students.length) * 100)}%
+                    {count} · {Math.round((count / students.length) * 100)}%
                   </span>
                 </div>
                 <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
@@ -101,6 +102,7 @@ export default function StatsPanel({ students }: Props) {
         </div>
       )}
 
+      {/* Age distribution hint */}
       {stats && (
         <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
           <p className="text-xs text-slate-500">
