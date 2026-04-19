@@ -1,6 +1,8 @@
 {
-  "maxNameLength": 40,
-  "maxCourseLength": 36,
-  "minAge": 1,
-  "maxAge": 120
+  "maxNameLength": 50,
+  "maxCourseLength": 60,
+  "minAge": 16,
+  "maxAge": 60,
+  "minGpa": 0,
+  "maxGpa": 4
 }

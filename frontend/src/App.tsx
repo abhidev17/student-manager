@@ -3,6 +3,7 @@ import { BookOpen, Sparkles, Users, GraduationCap, Sun, Moon, LayoutDashboard, S
 import type { Student } from "./types";
 import StudentForm from "./components/StudentForm";
 import StudentList from "./components/StudentList";
+import StatsPanel from "./components/StatsPanel";
 import Toast, { showToast } from "./components/Toast";
 import LoadingSpinner from "./components/LoadingSpinner";
 import Footer from "./components/Footer";
@@ -354,7 +355,14 @@ export default function App() {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-7 animate-slideUp" style={{ animationDelay: "60ms" }}>
                 {/* Form Section */}
                 <div className="lg:col-span-1">
-                  <StudentForm addOrUpdate={addOrUpdate} editing={editing} />
+                  <div className="space-y-6">
+                    <StudentForm
+                      addOrUpdate={addOrUpdate}
+                      editing={editing}
+                      onCancelEdit={() => setEditing(null)}
+                    />
+                    <StatsPanel students={students} />
+                  </div>
                 </div>
 
                 {/* List Section */}

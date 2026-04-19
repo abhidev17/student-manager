@@ -8,6 +8,8 @@ const MAX_NAME_LENGTH = validationLimits.maxNameLength;
 const MAX_COURSE_LENGTH = validationLimits.maxCourseLength;
 const MIN_AGE = validationLimits.minAge;
 const MAX_AGE = validationLimits.maxAge;
+const MIN_GPA = validationLimits.minGpa;
+const MAX_GPA = validationLimits.maxGpa;
 
 // Helper: read file
 function readData() {
@@ -25,6 +27,8 @@ function validateStudentPayload(payload) {
   const name = typeof payload.name === "string" ? payload.name.trim() : "";
   const course = typeof payload.course === "string" ? payload.course.trim() : "";
   const age = Number(payload.age);
+  const hasGpa = payload.gpa !== undefined && payload.gpa !== null && payload.gpa !== "";
+  const gpa = hasGpa ? Number(payload.gpa) : undefined;
 
   if (!name) {
     return { error: "Name is required" };
@@ -41,12 +45,16 @@ function validateStudentPayload(payload) {
   if (course.length > MAX_COURSE_LENGTH) {
     return { error: `Course must be ${MAX_COURSE_LENGTH} characters or fewer` };
   }
+  if (hasGpa && (!Number.isFinite(gpa) || gpa < MIN_GPA || gpa > MAX_GPA)) {
+    return { error: `GPA must be between ${MIN_GPA.toFixed(1)} and ${MAX_GPA.toFixed(1)}` };
+  }
 
   return {
     value: {
       name,
       age,
-      course
+      course,
+      ...(hasGpa ? { gpa } : {})
     }
   };
 }
