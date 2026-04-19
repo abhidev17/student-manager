@@ -61,11 +61,11 @@ export default function StudentForm({ addOrUpdate, editing, onCancelEdit }: Prop
     if (!name.trim()) e.name = "Name is required";
     else if (name.trim().length > MAX_NAME) e.name = `Max ${MAX_NAME} characters`;
     if (age === "" || Number(age) < MIN_AGE || Number(age) > MAX_AGE)
-      e.age = `Age must be ${MIN_AGE}-${MAX_AGE}`;
+      e.age = `Age must be ${MIN_AGE}–${MAX_AGE}`;
     if (!effectiveCourse.trim()) e.course = "Course is required";
     else if (effectiveCourse.trim().length > MAX_COURSE) e.course = `Max ${MAX_COURSE} characters`;
     if (gpa !== "" && (Number(gpa) < 0 || Number(gpa) > 4))
-      e.gpa = "GPA must be 0.0-4.0";
+      e.gpa = "GPA must be 0.0–4.0";
     return e;
   };
 
@@ -189,7 +189,7 @@ export default function StudentForm({ addOrUpdate, editing, onCancelEdit }: Prop
                 setAge(e.target.value === "" ? "" : Number(e.target.value));
                 setErrors((p) => ({ ...p, age: "" }));
               }}
-              placeholder={`${MIN_AGE}-${MAX_AGE}`}
+              placeholder={`${MIN_AGE}–${MAX_AGE}`}
               min={MIN_AGE}
               max={MAX_AGE}
               disabled={isLoading}
@@ -210,7 +210,7 @@ export default function StudentForm({ addOrUpdate, editing, onCancelEdit }: Prop
                 disabled={isLoading}
                 className={inputCls("course")}
               >
-                <option value="">Select a course...</option>
+                <option value="">Select a course…</option>
                 {COURSES.map((c) => (
                   <option key={c} value={c}>{c}</option>
                 ))}
@@ -242,7 +242,7 @@ export default function StudentForm({ addOrUpdate, editing, onCancelEdit }: Prop
                 setGpa(e.target.value === "" ? "" : Number(e.target.value));
                 setErrors((p) => ({ ...p, gpa: "" }));
               }}
-              placeholder="0.0 - 4.0"
+              placeholder="0.0 – 4.0"
               min={0}
               max={4}
               step={0.01}
@@ -263,7 +263,7 @@ export default function StudentForm({ addOrUpdate, editing, onCancelEdit }: Prop
               }`}
           >
             {isLoading ? (
-              <><Loader size={16} className="animate-spin" /> {editing ? "Saving..." : "Adding..."}</>
+              <><Loader size={16} className="animate-spin" /> {editing ? "Saving…" : "Adding…"}</>
             ) : editing ? (
               <><Edit2 size={16} /> Save changes</>
             ) : (

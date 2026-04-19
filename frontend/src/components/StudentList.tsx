@@ -19,12 +19,12 @@ type SortDir = "asc" | "desc";
 type AgeBand = "all" | "under-20" | "20-25" | "25+";
 
 const AVATAR_COLORS = [
-  ["#DBEAFE", "#1D4ED8"],
-  ["#D1FAE5", "#065F46"],
-  ["#FEF3C7", "#92400E"],
-  ["#EDE9FE", "#5B21B6"],
-  ["#FCE7F3", "#9D174D"],
-  ["#CFFAFE", "#0E7490"],
+  ["#DBEAFE", "#1D4ED8"], // blue
+  ["#D1FAE5", "#065F46"], // emerald
+  ["#FEF3C7", "#92400E"], // amber
+  ["#EDE9FE", "#5B21B6"], // violet
+  ["#FCE7F3", "#9D174D"], // pink
+  ["#CFFAFE", "#0E7490"], // cyan
 ];
 
 function getAvatarColors(name: string) {
@@ -185,6 +185,7 @@ export default function StudentList({ students, onDelete, onEdit, onQuickAdd }: 
 
   return (
     <div className="space-y-5 min-w-0">
+      {/* Header */}
       <div className="glass-panel rounded-2xl p-5 flex items-center justify-between gap-4">
         <div>
           <h2 className="font-display text-xl font-semibold text-slate-900">Student Directory</h2>
@@ -202,6 +203,7 @@ export default function StudentList({ students, onDelete, onEdit, onQuickAdd }: 
         </button>
       </div>
 
+      {/* Actions + Filters */}
       <div className="glass-panel rounded-2xl p-4 space-y-3">
         <div className="flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-slate-500">
@@ -261,6 +263,7 @@ export default function StudentList({ students, onDelete, onEdit, onQuickAdd }: 
         </div>
       </div>
 
+      {/* Search */}
       <div className="relative glass-panel rounded-2xl p-2.5">
         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none" />
         <input
@@ -280,6 +283,7 @@ export default function StudentList({ students, onDelete, onEdit, onQuickAdd }: 
         )}
       </div>
 
+      {/* Count bar */}
       <div className="flex items-center gap-3 px-5 py-3 rounded-2xl glass-panel">
         <div className="p-1.5 rounded-lg bg-sky-100 border border-sky-200">
           <Users size={16} className="text-sky-700" />
@@ -295,6 +299,7 @@ export default function StudentList({ students, onDelete, onEdit, onQuickAdd }: 
         )}
       </div>
 
+      {/* Empty state */}
       {students.length === 0 && (
         <div className="glass-panel rounded-2xl py-16 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-sky-50 border border-sky-100 mb-4">
@@ -305,6 +310,7 @@ export default function StudentList({ students, onDelete, onEdit, onQuickAdd }: 
         </div>
       )}
 
+      {/* No results */}
       {students.length > 0 && filtered.length === 0 && (
         <div className="glass-panel rounded-2xl py-12 text-center">
           <Search className="w-8 h-8 text-slate-400 mx-auto mb-3" />
@@ -313,6 +319,7 @@ export default function StudentList({ students, onDelete, onEdit, onQuickAdd }: 
         </div>
       )}
 
+      {/* Table */}
       {filtered.length > 0 && (
         <div className="glass-panel rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
