@@ -22,7 +22,7 @@ export const Button = ({
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`${baseClass} ${className} disabled:opacity-50 disabled:cursor-not-allowed`}
+      className={`${baseClass} ${className} active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed`}
     >
       {children}
     </button>

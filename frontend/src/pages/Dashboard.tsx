@@ -36,12 +36,15 @@ export const Dashboard = ({
       : '—';
 
   return (
-    <div>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-10">
-        <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
+    <div className="space-y-8">
+      {/* Header Section */}
+      <div className="flex items-center justify-between pb-2">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-1">Dashboard</h1>
+          <p className="text-sm text-gray-400">Overview of your student records</p>
+        </div>
 
-        <div className="flex gap-3">
+        <div className="flex items-center gap-2">
           <Button onClick={onAddStudent}>+ Add Student</Button>
           {onOpenImport && (
             <Button onClick={onOpenImport} variant="secondary">
@@ -57,7 +60,7 @@ export const Dashboard = ({
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
           {
             title: 'Total Students',
@@ -91,25 +94,24 @@ export const Dashboard = ({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.3 }}
-        className="mb-10"
       >
         <GlassCard>
-          <h3 className="text-lg font-semibold mb-6">Quick Stats</h3>
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-lg font-semibold text-white">Academic Overview</h3>
+          </div>
 
-          <div className="space-y-3 text-sm">
-            <div className="flex justify-between text-gray-300">
-              <span>Students with GPA</span>
-              <span className="font-semibold">
-                {students.filter((s) => s.gpa !== undefined).length}
-              </span>
+          <div className="grid grid-cols-3 gap-6">
+            <div className="border-l border-white/10 pl-6">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">With GPA Records</p>
+              <p className="text-3xl font-bold text-white">{students.filter((s) => s.gpa !== undefined).length}</p>
             </div>
-            <div className="flex justify-between text-green-400">
-              <span>Highest GPA</span>
-              <span className="font-semibold">{highestGpa}</span>
+            <div className="border-l border-white/10 pl-6">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Highest GPA</p>
+              <p className="text-3xl font-bold text-emerald-400">{highestGpa}</p>
             </div>
-            <div className="flex justify-between text-red-400">
-              <span>Lowest GPA</span>
-              <span className="font-semibold">{lowestGpa}</span>
+            <div className="border-l border-white/10 pl-6">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Lowest GPA</p>
+              <p className="text-3xl font-bold text-orange-400">{lowestGpa}</p>
             </div>
           </div>
         </GlassCard>

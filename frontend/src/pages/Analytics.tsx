@@ -32,14 +32,15 @@ export const Analytics = ({ students }: AnalyticsProps) => {
   };
 
   return (
-    <div>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-10">
-        <h1 className="text-2xl font-semibold tracking-tight">Analytics</h1>
+    <div className="space-y-8">
+      {/* Header Section */}
+      <div className="pb-2">
+        <h1 className="text-3xl font-bold text-white mb-1">Analytics</h1>
+        <p className="text-sm text-gray-400">Performance metrics and insights</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
           {
             title: 'Average GPA',
@@ -69,7 +70,7 @@ export const Analytics = ({ students }: AnalyticsProps) => {
       </div>
 
       {/* Age Distribution & GPA Stats */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Age Distribution */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -77,9 +78,12 @@ export const Analytics = ({ students }: AnalyticsProps) => {
           transition={{ duration: 0.4, delay: 0.3 }}
         >
           <GlassCard>
-            <h3 className="text-lg font-medium mb-6">Age Distribution</h3>
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-white">Age Distribution</h3>
+              <p className="text-xs text-gray-500 mt-1">Student demographics by age group</p>
+            </div>
 
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={220}>
               <LineChart
                 data={Object.entries(ageDistribution).map(([group, count]) => ({
                   name:
@@ -109,28 +113,23 @@ export const Analytics = ({ students }: AnalyticsProps) => {
           transition={{ duration: 0.4, delay: 0.4 }}
         >
           <GlassCard>
-            <h3 className="text-lg font-medium mb-6">GPA Statistics</h3>
+            <div className="mb-7">
+              <h3 className="text-lg font-semibold text-white">GPA Statistics</h3>
+              <p className="text-xs text-gray-500 mt-1">Performance summary</p>
+            </div>
 
-            <div className="space-y-4 text-sm">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Highest GPA</span>
-                <span className="text-green-400 font-semibold text-lg">
-                  {gpaStats.highest.toFixed(2)}
-                </span>
+            <div className="space-y-6">
+              <div>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Highest GPA</p>
+                <p className="text-3xl font-bold text-emerald-400">{gpaStats.highest.toFixed(2)}</p>
               </div>
-              <div className="h-px bg-white/10"></div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Average GPA</span>
-                <span className="text-blue-400 font-semibold text-lg">
-                  {gpaStats.average.toFixed(2)}
-                </span>
+              <div className="border-t border-white/8 pt-6">
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Average GPA</p>
+                <p className="text-3xl font-bold text-blue-400">{gpaStats.average.toFixed(2)}</p>
               </div>
-              <div className="h-px bg-white/10"></div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">Lowest GPA</span>
-                <span className="text-red-400 font-semibold text-lg">
-                  {gpaStats.lowest.toFixed(2)}
-                </span>
+              <div className="border-t border-white/8 pt-6">
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Lowest GPA</p>
+                <p className="text-3xl font-bold text-orange-400">{gpaStats.lowest.toFixed(2)}</p>
               </div>
             </div>
           </GlassCard>
