@@ -138,19 +138,19 @@ export default function App() {
       {/* Header */}
       <header className="dashboard-header sticky top-0 z-40 border-b border-white/70 bg-white/60 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
               <div className="p-3 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 shadow-[0_10px_30px_rgba(14,116,244,0.32)]">
                 <BookOpen className="w-6 h-6 text-white" />
               </div>
-              <div>
-                <h1 className="font-display text-3xl font-semibold tracking-tight text-slate-900">
+              <div className="min-w-0">
+                <h1 className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 truncate">
                   Student Manager
                 </h1>
-                <p className="text-slate-600 text-sm mt-1">Stripe-inspired dashboard • {activeSectionLabel}</p>
+                <p className="text-slate-600 text-xs sm:text-sm mt-1 truncate">Stripe-inspired dashboard • {activeSectionLabel}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <div className="hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-slate-200/80">
                 <Calendar className="w-4 h-4 text-slate-500" />
                 <span className="text-sm font-semibold text-slate-600">{currentDate}</span>
@@ -161,7 +161,7 @@ export default function App() {
               </div>
               <button
                 onClick={() => setTheme(prev => (prev === "light" ? "dark" : "light"))}
-                className="h-10 px-3 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition flex items-center gap-2"
+                className="h-10 px-2.5 sm:px-3 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm"
                 aria-label="Toggle theme"
               >
                 {theme === "light" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
@@ -330,9 +330,9 @@ export default function App() {
                         const width = Math.max(8, Math.round((count / maxCount) * 100));
 
                         return (
-                          <div key={course} className="space-y-1.5">
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="font-medium text-slate-700">{course}</span>
+                          <div key={course} className="space-y-1.5 min-w-0">
+                            <div className="flex items-center justify-between gap-3 text-sm min-w-0">
+                              <span className="font-medium text-slate-700 truncate">{course}</span>
                               <span className="font-semibold text-slate-900">{count}</span>
                             </div>
                             <div className="h-2.5 rounded-full bg-slate-100 overflow-hidden">

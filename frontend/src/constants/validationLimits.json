@@ -1,0 +1,6 @@
+{
+  "maxNameLength": 40,
+  "maxCourseLength": 36,
+  "minAge": 1,
+  "maxAge": 120
+}

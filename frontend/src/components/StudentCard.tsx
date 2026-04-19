@@ -59,17 +59,17 @@ export default function StudentCard({
 
         <div className="relative">
           {/* Header */}
-          <div className="flex items-start justify-between mb-5 pr-7">
-            <div className="flex-1">
+          <div className="flex items-start justify-between mb-5 pr-7 gap-3 min-w-0">
+            <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <User className="w-4 h-4 text-sky-700" />
-                <h3 className="font-display text-lg font-semibold text-slate-900 transition">
+                <h3 className="font-display text-base sm:text-lg font-semibold text-slate-900 transition truncate">
                   {student.name}
                 </h3>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 min-w-0">
                 <p className="text-xs text-slate-500 font-medium">ID: {student.id}</p>
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200/70 text-emerald-700">
+                <span className="hidden sm:inline-flex text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200/70 text-emerald-700 whitespace-nowrap">
                   Enrolled
                 </span>
               </div>
@@ -93,16 +93,16 @@ export default function StudentCard({
           </div>
 
           {/* Info Grid */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="p-3 rounded-xl bg-white border border-slate-100 transition">
               <p className="text-xs font-medium text-slate-500 mb-1">Age</p>
-              <p className="font-display text-xl font-semibold text-slate-900">{student.age}</p>
+              <p className="font-display text-lg sm:text-xl font-semibold text-slate-900">{student.age}</p>
             </div>
             <div className="p-3 rounded-xl bg-white border border-slate-100 transition">
               <p className="text-xs font-medium text-slate-500 mb-1 flex items-center gap-1">
                 <BookmarkIcon size={12} /> Course
               </p>
-              <p className="font-display text-xl font-semibold text-indigo-700 truncate">{student.course}</p>
+              <p className="font-display text-lg sm:text-xl font-semibold text-indigo-700 truncate">{student.course}</p>
             </div>
           </div>
         </div>

@@ -1,11 +1,17 @@
 import { useState, useEffect } from "react";
 import { Plus, Edit2, Loader, AlertCircle } from "lucide-react";
 import type { Student } from "../types";
+import validationLimits from "../constants/validationLimits.json";
 
 interface Props {
   addOrUpdate: (student: Student) => Promise<void>;
   editing: Student | null;
 }
+
+const MAX_NAME_LENGTH = validationLimits.maxNameLength;
+const MAX_COURSE_LENGTH = validationLimits.maxCourseLength;
+const MIN_AGE = validationLimits.minAge;
+const MAX_AGE = validationLimits.maxAge;
 
 export default function StudentForm({ addOrUpdate, editing }: Props) {
   const [name, setName] = useState("");
@@ -27,8 +33,16 @@ export default function StudentForm({ addOrUpdate, editing }: Props) {
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
     if (!name.trim()) newErrors.name = "Name is required";
-    if (age < 1 || age > 120) newErrors.age = "Age must be between 1 and 120";
+    if (name.trim().length > MAX_NAME_LENGTH) {
+      newErrors.name = `Name must be ${MAX_NAME_LENGTH} characters or fewer`;
+    }
+    if (age < MIN_AGE || age > MAX_AGE) {
+      newErrors.age = `Age must be between ${MIN_AGE} and ${MAX_AGE}`;
+    }
     if (!course.trim()) newErrors.course = "Course is required";
+    if (course.trim().length > MAX_COURSE_LENGTH) {
+      newErrors.course = `Course must be ${MAX_COURSE_LENGTH} characters or fewer`;
+    }
     return newErrors;
   };
 
@@ -90,10 +104,11 @@ export default function StudentForm({ addOrUpdate, editing }: Props) {
             type="text"
             value={name}
             onChange={e => {
-              setName(e.target.value);
+              setName(e.target.value.slice(0, MAX_NAME_LENGTH));
               setErrors(prev => ({ ...prev, name: "" }));
             }}
             placeholder="John Doe"
+            maxLength={MAX_NAME_LENGTH}
             disabled={isLoading}
             className={`w-full px-4 py-3 rounded-xl bg-white/75 border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] ${
               errors.name
@@ -107,6 +122,7 @@ export default function StudentForm({ addOrUpdate, editing }: Props) {
               {errors.name}
             </div>
           )}
+          <p className="mt-1 text-xs text-slate-500 text-right">{name.length}/{MAX_NAME_LENGTH}</p>
         </div>
 
         {/* Age Input */}
@@ -122,8 +138,8 @@ export default function StudentForm({ addOrUpdate, editing }: Props) {
               setErrors(prev => ({ ...prev, age: "" }));
             }}
             placeholder="25"
-            min="1"
-            max="120"
+            min={MIN_AGE}
+            max={MAX_AGE}
             disabled={isLoading}
             className={`w-full px-4 py-3 rounded-xl bg-white/75 border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] ${
               errors.age
@@ -148,10 +164,11 @@ export default function StudentForm({ addOrUpdate, editing }: Props) {
             type="text"
             value={course}
             onChange={e => {
-              setCourse(e.target.value);
+              setCourse(e.target.value.slice(0, MAX_COURSE_LENGTH));
               setErrors(prev => ({ ...prev, course: "" }));
             }}
             placeholder="Computer Science"
+            maxLength={MAX_COURSE_LENGTH}
             disabled={isLoading}
             className={`w-full px-4 py-3 rounded-xl bg-white/75 border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] ${
               errors.course
@@ -165,6 +182,7 @@ export default function StudentForm({ addOrUpdate, editing }: Props) {
               {errors.course}
             </div>
           )}
+          <p className="mt-1 text-xs text-slate-500 text-right">{course.length}/{MAX_COURSE_LENGTH}</p>
         </div>
 
         {/* Submit Button */}

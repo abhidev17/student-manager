@@ -88,23 +88,23 @@ export default function StudentList({ students, onDelete, onEdit, onQuickAdd }: 
     filteredStudents.length > 0 && filteredStudents.every(student => selectedIds.includes(student.id));
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 min-w-0">
       <div className="glass-panel rounded-2xl p-5">
         <h2 className="font-display text-xl font-semibold text-slate-900">Student Directory</h2>
         <p className="text-sm text-slate-600 mt-1">Search, review, and manage your student records.</p>
       </div>
 
       {/* Command Bar */}
-      <div className="glass-panel rounded-2xl p-4 space-y-4">
+      <div className="glass-panel rounded-2xl p-4 space-y-4 min-w-0">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
           <div className="flex items-center gap-2 text-slate-600">
             <SlidersHorizontal className="w-4 h-4" />
             <p className="text-sm font-semibold">Quick Actions</p>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 w-full lg:w-auto">
             <button
               onClick={onQuickAdd}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-sky-200 bg-sky-50 text-sky-700 text-sm font-semibold hover:bg-sky-100 transition"
+              className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-sky-200 bg-sky-50 text-sky-700 text-xs sm:text-sm font-semibold hover:bg-sky-100 transition whitespace-nowrap"
             >
               <PlusCircle className="w-4 h-4" />
               Quick Add
@@ -112,7 +112,7 @@ export default function StudentList({ students, onDelete, onEdit, onQuickAdd }: 
             <button
               onClick={toggleSelectAllVisible}
               disabled={filteredStudents.length === 0}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 text-sm font-semibold hover:bg-slate-50 transition disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs sm:text-sm font-semibold hover:bg-slate-50 transition disabled:opacity-50 whitespace-nowrap"
             >
               <CheckSquare className="w-4 h-4" />
               {allVisibleSelected ? "Unselect All" : "Select All"}
@@ -120,15 +120,15 @@ export default function StudentList({ students, onDelete, onEdit, onQuickAdd }: 
             <button
               onClick={handleBulkDeleteRequest}
               disabled={selectedIds.length === 0}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-red-200 bg-red-50 text-red-700 text-sm font-semibold hover:bg-red-100 transition disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-red-200 bg-red-50 text-red-700 text-xs sm:text-sm font-semibold hover:bg-red-100 transition disabled:opacity-50 whitespace-nowrap"
             >
               <Trash2 className="w-4 h-4" />
-              Delete Selected ({selectedIds.length})
+              Delete ({selectedIds.length})
             </button>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 min-w-0">
           <span className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Course</span>
           <button
             onClick={() => setActiveCourse("all")}
@@ -144,7 +144,7 @@ export default function StudentList({ students, onDelete, onEdit, onQuickAdd }: 
             <button
               key={course}
               onClick={() => setActiveCourse(course)}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold border max-w-[11rem] truncate ${
                 activeCourse === course
                   ? "bg-sky-50 border-sky-200 text-sky-700"
                   : "bg-white border-slate-200 text-slate-600"
@@ -199,20 +199,20 @@ export default function StudentList({ students, onDelete, onEdit, onQuickAdd }: 
       </div>
 
       {/* Results Counter and Stats */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-2xl glass-panel">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-2xl glass-panel min-w-0">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-lg bg-sky-100 border border-sky-200">
             <Users className="w-5 h-5 text-sky-700" />
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="text-sm font-medium text-slate-500">Students found</p>
-            <p className="font-display text-2xl font-semibold text-slate-900">
+            <p className="font-display text-xl sm:text-2xl font-semibold text-slate-900">
               {filteredStudents.length} of {students.length}
             </p>
           </div>
         </div>
         {searchTerm && (
-          <div className="text-sm text-slate-500">
+          <div className="text-sm text-slate-500 max-w-full sm:max-w-[16rem] truncate">
             Filtered by: <span className="text-sky-700 font-semibold">"{searchTerm}"</span>
           </div>
         )}
