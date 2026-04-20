@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
-const validationLimits = require("../../frontend/src/constants/validationLimits.json");
+const validationLimits = require("../constants/validationLimits.json");
 
 const FILE = "./data/students.json";
 const MAX_NAME_LENGTH = validationLimits.maxNameLength;
