@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
   import { fade, scale } from "svelte/transition";
   import { fly } from "svelte/transition";
 
@@ -43,7 +44,13 @@
 
   const fetchStudents = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/students`);
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/students`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       const data = await res.json();
       students = data;
     } catch (error) {
@@ -53,14 +60,28 @@
     loading = false;
   };
 
-  onMount(fetchStudents);
+  onMount(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      goto("/login");
+      return;
+    }
+
+    fetchStudents();
+  });
 
   const deleteStudent = async (id) => {
     if (!confirm("Delete this student?")) return;
 
     try {
+      const token = localStorage.getItem("token");
+
       await fetch(`${import.meta.env.VITE_API_URL}/api/students/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
       triggerToast("Student deleted 🗑️");
@@ -88,11 +109,13 @@
         : `${import.meta.env.VITE_API_URL}/api/students`;
 
       const method = isEditing ? "PUT" : "POST";
+      const token = localStorage.getItem("token");
 
       await fetch(url, {
         method,
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           ...form,
@@ -121,6 +144,13 @@
 
 <main>
   <h1>Student Management</h1>
+
+  <button onclick={() => {
+    localStorage.removeItem("token");
+    goto("/login");
+  }}>
+    Logout
+  </button>
 
   <button class="add-btn" onclick={() => showModal = true}>
     + Add Student

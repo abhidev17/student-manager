@@ -18,7 +18,9 @@ app.use(cors({
 
 // Routes
 const studentRoutes = require("./routes/student.routes");
+const authRoutes = require("./routes/auth.routes");
 app.use("/api/students", studentRoutes);
+app.use("/api/auth", authRoutes);
 
 // Root route
 app.get("/", (req, res) => {
