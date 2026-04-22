@@ -5,27 +5,10 @@
   let email = $state("");
   let password = $state("");
 
-  onMount(async () => {
+  onMount(() => {
     const token = localStorage.getItem("token");
 
-    if (!token) return;
-
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/students`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      if (res.ok) {
-        goto("/");
-      } else {
-        localStorage.removeItem("token");
-      }
-    } catch (error) {
-      localStorage.removeItem("token");
-      console.error(error);
-    }
+    if (token) goto("/");
   });
 
   const login = async () => {
@@ -59,8 +42,8 @@
   };
 </script>
 
-<main>
-  <h1>Login</h1>
+<main class="login">
+  <h1>Welcome Back 👋</h1>
 
   <input placeholder="Email" bind:value={email} />
   <input type="password" placeholder="Password" bind:value={password} />
@@ -69,15 +52,30 @@
 </main>
 
 <style>
-  main {
-    max-width: 300px;
+.login {
+    max-width: 320px;
     margin: auto;
-    padding: 2rem;
+    padding: 3rem 2rem;
+    background: #1e1e1e;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    color: white;
   }
 
   input {
     width: 100%;
     margin: 0.5rem 0;
-    padding: 0.5rem;
+    padding: 0.6rem;
+    border-radius: 8px;
+    border: none;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.6rem;
+    background: #4CAF50;
+    color: white;
+    border-radius: 8px;
   }
 </style>

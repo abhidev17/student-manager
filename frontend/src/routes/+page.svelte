@@ -42,6 +42,16 @@
     }, 2000);
   };
 
+  const handleUnauthorized = (res) => {
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      goto("/login");
+      return true;
+    }
+
+    return false;
+  };
+
   const fetchStudents = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -51,6 +61,15 @@
           Authorization: `Bearer ${token}`
         }
       });
+
+      if (handleUnauthorized(res)) return;
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error(text);
+        throw new Error("Request failed");
+      }
+
       const data = await res.json();
       students = data;
     } catch (error) {
@@ -77,12 +96,20 @@
     try {
       const token = localStorage.getItem("token");
 
-      await fetch(`${import.meta.env.VITE_API_URL}/api/students/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/students/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
+
+      if (handleUnauthorized(res)) return;
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error(text);
+        throw new Error("Request failed");
+      }
 
       triggerToast("Student deleted 🗑️");
 
@@ -111,7 +138,7 @@
       const method = isEditing ? "PUT" : "POST";
       const token = localStorage.getItem("token");
 
-      await fetch(url, {
+      const res = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
@@ -123,6 +150,14 @@
           gpa: Number(form.gpa)
         })
       });
+
+      if (handleUnauthorized(res)) return;
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error(text);
+        throw new Error("Request failed");
+      }
 
       triggerToast(isEditing ? "Student updated ✏️" : "Student added ✅");
 
@@ -174,7 +209,10 @@
     <p>Loading students...</p>
 
   {:else if students.length === 0}
-    <p>No students found 🚫</p>
+    <div class="empty">
+      <p>No students yet 📭</p>
+      <small>Add your first student</small>
+    </div>
 
   {:else if filteredStudents.length === 0}
     <p>No matching students for current filters.</p>
@@ -251,6 +289,12 @@
     padding: 0.5rem;
     border-radius: 8px;
     border: 1px solid #ccc;
+  }
+
+  .empty {
+    text-align: center;
+    color: #777;
+    margin-top: 2rem;
   }
 
   .grid {
