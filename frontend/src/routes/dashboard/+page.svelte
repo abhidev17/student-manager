@@ -1,5 +1,9 @@
 <script>
   import { onMount } from "svelte";
+  import Chart from "chart.js/auto";
+
+  let chart;
+  let chartCanvas;
 
   let stats = $state({
     total: 0,
@@ -7,7 +11,7 @@
     courses: {}
   });
 
-  const fetchStats = async () => {
+  const loadChart = async () => {
     const token = localStorage.getItem("token");
 
     const res = await fetch(`${import.meta.env.VITE_API_URL}/api/students`, {
@@ -30,9 +34,25 @@
     });
 
     stats.courses = courseMap;
+
+    chart = new Chart(chartCanvas, {
+      type: "pie",
+      data: {
+        labels: Object.keys(courseMap),
+        datasets: [{
+          data: Object.values(courseMap)
+        }]
+      }
+    });
   };
 
-  onMount(fetchStats);
+  onMount(() => {
+    loadChart();
+
+    return () => {
+      if (chart) chart.destroy();
+    };
+  });
 </script>
 
 <main>
@@ -56,6 +76,8 @@
       {/each}
     </div>
   </div>
+
+  <canvas id="chart" bind:this={chartCanvas}></canvas>
 </main>
 
 <style>

@@ -3,6 +3,8 @@
   import { goto } from "$app/navigation";
   import { fade, scale } from "svelte/transition";
   import { fly } from "svelte/transition";
+  import jsPDF from "jspdf";
+  import Papa from "papaparse";
 
   let students = $state([]);
   let loading = $state(true);
@@ -11,8 +13,7 @@
   let editId = $state(null);
   let search = $state("");
   let selectedCourse = $state("");
-  let toast = $state("");
-  let showToast = $state(false);
+  let notifications = $state([]);
   let isSaving = $state(false);
 
   let form = $state({
@@ -33,13 +34,17 @@
     })
   );
 
-  const triggerToast = (message) => {
-    toast = message;
-    showToast = true;
+  const notify = (msg, type = "success") => {
+    const id = Date.now();
+
+    notifications = [
+      ...notifications,
+      { id, msg, type }
+    ];
 
     setTimeout(() => {
-      showToast = false;
-    }, 2000);
+      notifications = notifications.filter((n) => n.id !== id);
+    }, 3000);
   };
 
   const handleUnauthorized = (res) => {
@@ -111,11 +116,11 @@
         throw new Error("Request failed");
       }
 
-      triggerToast("Student deleted 🗑️");
+      notify("Student deleted 🗑️");
 
       await fetchStudents();
     } catch (error) {
-      triggerToast("Delete failed ❌");
+      notify("Delete failed ❌", "error");
       console.error(error);
     }
   };
@@ -159,7 +164,7 @@
         throw new Error("Request failed");
       }
 
-      triggerToast(isEditing ? "Student updated ✏️" : "Student added ✅");
+      notify(isEditing ? "Student updated ✏️" : "Student added ✅");
 
       showModal = false;
       isEditing = false;
@@ -169,11 +174,105 @@
 
       await fetchStudents();
     } catch (error) {
-      triggerToast("Something went wrong ❌");
+      notify("Something went wrong ❌", "error");
       console.error(error);
     }
 
     isSaving = false;
+  };
+
+  const exportCSV = () => {
+    if (!filteredStudents.length) {
+      alert("No data to export");
+      return;
+    }
+
+    const headers = ["Name", "Age", "Course", "GPA"];
+
+    const rows = filteredStudents.map((s) => [
+      s.name,
+      s.age,
+      s.course,
+      s.gpa
+    ]);
+
+    const csvContent =
+      [headers, ...rows]
+        .map((row) => row.join(","))
+        .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "students.csv";
+    a.click();
+
+    URL.revokeObjectURL(url);
+  };
+
+  const exportPDF = () => {
+    if (!filteredStudents.length) {
+      alert("No data to export");
+      return;
+    }
+
+    const doc = new jsPDF();
+
+    doc.text("Student List", 10, 10);
+
+    filteredStudents.forEach((s, i) => {
+      doc.text(
+        `${s.name} | ${s.age} | ${s.course} | ${s.gpa}`,
+        10,
+        20 + i * 10
+      );
+    });
+
+    doc.save("students.pdf");
+  };
+
+  const handleCSV = (event) => {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    Papa.parse(file, {
+      header: true,
+      complete: async (results) => {
+        try {
+          const token = localStorage.getItem("token");
+
+          for (const row of results.data) {
+            if (!row.Name || !row.Age || !row.Course || !row.GPA) continue;
+
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/students`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+              },
+              body: JSON.stringify({
+                name: row.Name,
+                age: Number(row.Age),
+                course: row.Course,
+                gpa: Number(row.GPA)
+              })
+            });
+
+            if (handleUnauthorized(res)) return;
+          }
+
+          notify("CSV Imported ✅");
+          fetchStudents();
+        } catch (error) {
+          notify("CSV import failed ❌", "error");
+          console.error(error);
+        }
+      }
+    });
   };
 </script>
 
@@ -206,6 +305,16 @@
       <option value="ME">ME</option>
     </select>
   </div>
+
+  <button onclick={exportCSV} class="export">
+    Export CSV 📄
+  </button>
+
+  <button onclick={exportPDF}>
+    Export PDF 📑
+  </button>
+
+  <input type="file" accept=".csv" onchange={handleCSV} />
 
   {#if loading}
     <p>Loading students...</p>
@@ -261,11 +370,13 @@
     </div>
   {/if}
 
-  {#if showToast}
-    <div class="toast">
-      {toast}
-    </div>
-  {/if}
+  <div class="notifications">
+    {#each notifications as n (n.id)}
+      <div class={`toast ${n.type}`}>
+        {n.msg}
+      </div>
+    {/each}
+  </div>
 </main>
 
 <style>
@@ -338,6 +449,11 @@
     cursor: pointer;
   }
 
+  .export {
+    background: #28a745;
+    color: white;
+  }
+
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -401,15 +517,25 @@
     color: white;
   }
 
-  .toast {
+  .notifications {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: #333;
-    color: white;
-    padding: 0.8rem 1.2rem;
+  }
+
+  .toast {
+    margin-top: 10px;
+    padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    color: white;
+  }
+
+  .toast.success {
+    background: green;
+  }
+
+  .toast.error {
+    background: red;
   }
 
   @media (max-width: 600px) {
