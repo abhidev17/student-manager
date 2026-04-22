@@ -5,6 +5,7 @@
   import { fly } from "svelte/transition";
   import jsPDF from "jspdf";
   import Papa from "papaparse";
+  import { io } from "socket.io-client";
 
   let students = $state([]);
   let loading = $state(true);
@@ -92,7 +93,16 @@
       return;
     }
 
+    const socket = io(import.meta.env.VITE_API_URL);
+    socket.on("studentAdded", () => {
+      fetchStudents();
+    });
+
     fetchStudents();
+
+    return () => {
+      socket.disconnect();
+    };
   });
 
   const deleteStudent = async (id) => {
