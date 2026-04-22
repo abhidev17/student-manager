@@ -4,41 +4,47 @@
 	import { page } from '$app/stores';
 
 	let { children } = $props();
+
+	const authRoutes = ['/login', '/signup', '/forgot'];
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<div class="app-container">
-	<aside class="sidebar" in:fly={{ x: -10, duration: 200 }}>
-		<div class="logo">
-			<div class="logo-icon">S</div>
-			<span>Gradely</span>
-		</div>
-		<nav>
-			<a href="/dashboard" class:active={$page.url.pathname === '/dashboard'}>
-				Dashboard
-			</a>
-			<a href="/" class:active={$page.url.pathname === '/'}>
-				Students
-			</a>
-		</nav>
-	</aside>
-
-	<main class="main-content">
-		<header class="top-nav">
-			<h1>{$page.url.pathname.split('/').pop()?.toUpperCase() || 'HOME'}</h1>
-			<div class="user-profile">
-				<div class="avatar">A</div>
+{#if authRoutes.includes($page.url.pathname)}
+	{@render children()}
+{:else}
+	<div class="app-container">
+		<aside class="sidebar" in:fly={{ x: -10, duration: 200 }}>
+			<div class="logo">
+				<div class="logo-icon">S</div>
+				<span>Gradely</span>
 			</div>
-		</header>
+			<nav>
+				<a href="/dashboard" class:active={$page.url.pathname === '/dashboard'}>
+					Dashboard
+				</a>
+				<a href="/" class:active={$page.url.pathname === '/'}>
+					Students
+				</a>
+			</nav>
+		</aside>
 
-		<section class="page-body" in:fade={{ duration: 200 }}>
-			{@render children()}
-		</section>
-	</main>
-</div>
+		<main class="main-content">
+			<header class="top-nav">
+				<h1>{$page.url.pathname.split('/').pop()?.toUpperCase() || 'HOME'}</h1>
+				<div class="user-profile">
+					<div class="avatar">A</div>
+				</div>
+			</header>
+
+			<section class="page-body" in:fade={{ duration: 200 }}>
+				{@render children()}
+			</section>
+		</main>
+	</div>
+{/if}
 
 <style>
 	:global(body) {
