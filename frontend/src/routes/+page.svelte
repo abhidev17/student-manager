@@ -180,6 +180,8 @@
 <main>
   <h1>Student Management</h1>
 
+  <a href="/dashboard">Dashboard</a>
+
   <button onclick={() => {
     localStorage.removeItem("token");
     goto("/login");
@@ -268,9 +270,9 @@
 
 <style>
   main {
-    max-width: 900px;
+    max-width: 1000px;
     margin: auto;
-    padding: 2rem;
+    padding: 1rem;
     font-family: system-ui, -apple-system, sans-serif;
   }
 
@@ -299,14 +301,14 @@
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
   }
 
   .card {
     background: #ffffff;
-    padding: 1.5rem;
-    border-radius: 14px;
+    padding: 1rem;
+    border-radius: 10px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     transition: all 0.25s ease;
   }
@@ -408,5 +410,23 @@
     padding: 0.8rem 1.2rem;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .controls {
+      flex-direction: column;
+    }
+
+    button {
+      width: 100%;
+    }
+
+    .modal {
+      width: 90%;
+    }
   }
 </style>
