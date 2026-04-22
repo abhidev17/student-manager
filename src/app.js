@@ -12,7 +12,9 @@ connectDB();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "*"
+}));
 
 // Routes
 const studentRoutes = require("./routes/student.routes");
