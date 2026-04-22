@@ -43,7 +43,7 @@
 
   const fetchStudents = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/students");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/students`);
       const data = await res.json();
       students = data;
     } catch (error) {
@@ -59,7 +59,7 @@
     if (!confirm("Delete this student?")) return;
 
     try {
-      await fetch(`http://localhost:3000/api/students/${id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/students/${id}`, {
         method: "DELETE"
       });
 
@@ -84,8 +84,8 @@
 
     try {
       const url = isEditing
-        ? `http://localhost:3000/api/students/${editId}`
-        : "http://localhost:3000/api/students";
+        ? `${import.meta.env.VITE_API_URL}/api/students/${editId}`
+        : `${import.meta.env.VITE_API_URL}/api/students`;
 
       const method = isEditing ? "PUT" : "POST";
 
