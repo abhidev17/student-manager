@@ -6,6 +6,7 @@
   import jsPDF from "jspdf";
   import Papa from "papaparse";
   import { io } from "socket.io-client";
+  import { clearAuth, fetchWithAuth } from "$lib/auth";
 
   let students = $state([]);
   let loading = $state(true);
@@ -48,27 +49,10 @@
     }, 3000);
   };
 
-  const handleUnauthorized = (res) => {
-    if (res.status === 401) {
-      localStorage.removeItem("token");
-      goto("/login");
-      return true;
-    }
-
-    return false;
-  };
-
   const fetchStudents = async () => {
     try {
-      const token = localStorage.getItem("token");
-
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/students`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      if (handleUnauthorized(res)) return;
+      const res = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/students`);
+      if (!res) return;
 
       if (!res.ok) {
         const text = await res.text();
@@ -109,16 +93,10 @@
     if (!confirm("Delete this student?")) return;
 
     try {
-      const token = localStorage.getItem("token");
-
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/students/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+      const res = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/students/${id}`, {
+        method: "DELETE"
       });
-
-      if (handleUnauthorized(res)) return;
+      if (!res) return;
 
       if (!res.ok) {
         const text = await res.text();
@@ -151,13 +129,10 @@
         : `${import.meta.env.VITE_API_URL}/api/students`;
 
       const method = isEditing ? "PUT" : "POST";
-      const token = localStorage.getItem("token");
-
-      const res = await fetch(url, {
+      const res = await fetchWithAuth(url, {
         method,
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           ...form,
@@ -165,8 +140,7 @@
           gpa: Number(form.gpa)
         })
       });
-
-      if (handleUnauthorized(res)) return;
+      if (!res) return;
 
       if (!res.ok) {
         const text = await res.text();
@@ -253,16 +227,13 @@
       header: true,
       complete: async (results) => {
         try {
-          const token = localStorage.getItem("token");
-
           for (const row of results.data) {
             if (!row.Name || !row.Age || !row.Course || !row.GPA) continue;
 
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/students`, {
+            const res = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/students`, {
               method: "POST",
               headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
+                "Content-Type": "application/json"
               },
               body: JSON.stringify({
                 name: row.Name,
@@ -271,8 +242,7 @@
                 gpa: Number(row.GPA)
               })
             });
-
-            if (handleUnauthorized(res)) return;
+            if (!res) return;
           }
 
           notify("CSV Imported ✅");
@@ -292,7 +262,7 @@
   <a href="/dashboard">Dashboard</a>
 
   <button onclick={() => {
-    localStorage.removeItem("token");
+    clearAuth();
     goto("/login");
   }}>
     Logout

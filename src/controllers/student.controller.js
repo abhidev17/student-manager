@@ -1,6 +1,21 @@
 const studentService = require("../services/student.service");
 const asyncHandler = require("../utils/asyncHandler");
 const { getIo } = require("../socket");
+const { z } = require("zod");
+
+const studentSchema = z.object({
+    name: z.string().min(1),
+    age: z.number().int().positive(),
+    course: z.string().min(1),
+    gpa: z.number().min(0).max(10)
+});
+
+const updateStudentSchema = z.object({
+    name: z.string().min(1).optional(),
+    age: z.number().int().positive().optional(),
+    course: z.string().min(1).optional(),
+    gpa: z.number().min(0).max(10).optional()
+});
 
 // GET all
 const getStudents = asyncHandler(async (req, res) => {
@@ -21,11 +36,13 @@ const getStudent = asyncHandler(async (req, res) => {
 
 // CREATE
 const addStudent = asyncHandler(async (req, res) => {
-    const { name, age, course, gpa } = req.body;
+    const parsed = studentSchema.safeParse(req.body);
 
-    if (!name || !age || !course || gpa === undefined) {
-        return res.status(400).json({ error: "All fields are required" });
+    if (!parsed.success) {
+        return res.status(400).json({ error: "Invalid student data" });
     }
+
+    const { name, age, course, gpa } = parsed.data;
 
     const newStudent = await studentService.createStudent({
         name,
@@ -47,9 +64,15 @@ const addStudent = asyncHandler(async (req, res) => {
 
 // UPDATE
 const updateStudent = asyncHandler(async (req, res) => {
+    const parsed = updateStudentSchema.safeParse(req.body);
+
+    if (!parsed.success) {
+        return res.status(400).json({ error: "Invalid student data" });
+    }
+
     const updated = await studentService.updateStudent(
         req.params.id,
-        req.body,
+        parsed.data,
         req.user.id,
         req.user.role === "admin"
     );

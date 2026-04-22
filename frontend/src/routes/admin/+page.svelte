@@ -1,15 +1,13 @@
 <script>
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { fetchWithAuth } from "$lib/auth";
 
   let users = $state([]);
 
   const fetchUsers = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    });
+    const res = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/api/users`);
+    if (!res) return;
 
     if (res.status === 401 || res.status === 403) {
       goto("/");

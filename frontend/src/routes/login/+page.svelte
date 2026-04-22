@@ -30,8 +30,11 @@
 
       const data = await res.json();
 
-      if (data.token) {
-        localStorage.setItem("token", data.token);
+      if (data.accessToken || data.token) {
+        localStorage.setItem("token", data.accessToken || data.token);
+        if (data.refreshToken) {
+          localStorage.setItem("refreshToken", data.refreshToken);
+        }
         goto("/");
       } else {
         alert("Login failed");

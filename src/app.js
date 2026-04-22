@@ -4,6 +4,8 @@ const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
 const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+const morgan = require("morgan");
 
 const connectDB = require("./config/db");
 const errorHandler = require("./middlewares/error.middleware");
@@ -27,6 +29,8 @@ const limiter = rateLimit({
 
 // Middleware
 app.use(express.json());
+app.use(helmet());
+app.use(morgan("dev"));
 app.use(cors({
     origin: "*"
 }));
