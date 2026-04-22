@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { fade, fly } from 'svelte/transition';
+  import { fade } from 'svelte/transition';
   import { goto } from '$app/navigation';
 
   let email = $state('');
@@ -52,24 +52,24 @@
 </script>
 
 <div class="auth-container">
-  <div class="auth-form-section" in:fly={{ x: -20, duration: 600 }}>
+  <div class="auth-form-section" in:fade={{ duration: 600 }}>
     <div class="form-wrapper">
       <header>
-        <div class="logo-circle">G</div>
-        <h1>Welcome back</h1>
-        <p>Enter your credentials to access your dashboard</p>
+        <div class="logo-icon-generic">L</div>
+        <h1>Secure access</h1>
+        <p>Enter your credentials to continue</p>
       </header>
 
       <form on:submit|preventDefault={handleLogin}>
         <div class="input-group">
-          <label for="email">Email address</label>
-          <input type="email" id="email" bind:value={email} placeholder="name@university.edu" required />
+          <label for="email">User email</label>
+          <input type="email" id="email" bind:value={email} placeholder="you@email.com" required />
         </div>
 
         <div class="input-group">
           <div class="label-row">
-            <label for="password">Password</label>
-            <a href="/forgot" class="forgot-link">Forgot?</a>
+            <label for="password">System password</label>
+            <a href="/forgot" class="forgot-link">Recover access?</a>
           </div>
           <input type="password" id="password" bind:value={password} placeholder="••••••••" required />
         </div>
@@ -78,27 +78,21 @@
           <div class="error" transition:fade={{ duration: 200 }}>{error}</div>
         {/if}
 
-        <button type="submit" class="btn-primary">Sign in</button>
+        <button type="submit" class="btn-primary">Login</button>
       </form>
-
-      <footer>
-        <p>Don't have an account? <a href="/signup">Create one for free</a></p>
-      </footer>
     </div>
   </div>
 
   <div class="auth-visual-section" in:fade={{ duration: 400 }}>
-    <div class="overlay-content">
-      <blockquote>
-        "Gradely has transformed how we track student progress. The AI insights are a game changer."
-      </blockquote>
-      <cite>— Academic Director, Tech University</cite>
-    </div>
+    <div class="background-texture-overlay"></div>
+    <div class="graphic-orb orb-one"></div>
+    <div class="graphic-orb orb-two"></div>
+    <div class="graphic-grid"></div>
   </div>
 </div>
 
 <style>
-.auth-container {
+  .auth-container {
     display: flex;
     min-height: 100vh;
     background: #ffffff;
@@ -109,43 +103,48 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px;
+    padding: 60px;
   }
 
   .form-wrapper {
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
   }
 
   header {
-    margin-bottom: 32px;
+    margin-bottom: 40px;
   }
 
-  .logo-circle {
-    width: 40px;
-    height: 40px;
-    background: #3b82f6;
-    color: white;
-    border-radius: 10px;
+  .logo-icon-generic {
+    width: 48px;
+    height: 48px;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border-radius: 12px;
     display: grid;
     place-items: center;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: 24px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
   }
 
   h1 {
-    font-size: 1.875rem;
+    font-size: 2rem;
     color: #0f172a;
-    margin: 0 0 8px 0;
+    margin: 0 0 10px 0;
+    font-weight: 700;
+    letter-spacing: -0.01em;
   }
 
   header p {
     color: #64748b;
-    font-size: 0.95rem;
+    font-size: 1rem;
+    line-height: 1.5;
   }
 
   .input-group {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
 
   .label-row {
@@ -157,41 +156,49 @@
 
   label {
     display: block;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #475569;
   }
 
   input {
     width: 100%;
-    padding: 12px 16px;
+    padding: 14px 18px;
     border: 1px solid #e2e8f0;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 1rem;
     transition: all 0.2s;
     outline: none;
+    color: #1e293b;
+    background: #f8fafc;
   }
 
   input:focus {
     border-color: #3b82f6;
+    background: #ffffff;
     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
   }
 
   .btn-primary {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     background: #0f172a;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 600;
+    font-size: 1rem;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.1s;
     margin-top: 10px;
   }
 
   .btn-primary:hover {
     background: #1e293b;
+  }
+
+  .btn-primary:active {
+    transform: scale(0.99);
   }
 
   .error {
@@ -204,54 +211,79 @@
     margin-bottom: 10px;
   }
 
-  .forgot-link,
-  footer a {
-    color: #3b82f6;
+  .forgot-link {
+    color: #64748b;
     text-decoration: none;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-weight: 500;
   }
 
-  footer {
-    margin-top: 32px;
-    text-align: center;
-    font-size: 0.875rem;
-    color: #64748b;
+  .forgot-link:hover {
+    color: #3b82f6;
   }
 
   .auth-visual-section {
-    flex: 1.2;
+    flex: 1.3;
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     position: relative;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
+    justify-content: center;
     padding: 80px;
     color: white;
+    overflow: hidden;
   }
 
-  .overlay-content {
-    max-width: 450px;
+  .background-texture-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 25% 20%, rgba(148, 163, 184, 0.16), transparent 34%),
+      radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.12), transparent 32%);
   }
 
-  blockquote {
-    font-size: 1.5rem;
-    font-weight: 300;
-    margin: 0 0 20px 0;
-    line-height: 1.4;
+  .graphic-orb {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    box-shadow: inset 0 0 24px rgba(148, 163, 184, 0.08);
   }
 
-  cite {
-    color: #94a3b8;
-    font-style: normal;
+  .orb-one {
+    width: 320px;
+    height: 320px;
+    top: 18%;
+    right: 12%;
+    background: radial-gradient(circle at 30% 30%, rgba(203, 213, 225, 0.16), rgba(15, 23, 42, 0.02));
   }
 
-  @media (max-width: 900px) {
+  .orb-two {
+    width: 220px;
+    height: 220px;
+    bottom: 14%;
+    left: 14%;
+    background: radial-gradient(circle at 65% 35%, rgba(59, 130, 246, 0.18), rgba(30, 41, 59, 0.03));
+  }
+
+  .graphic-grid {
+    position: absolute;
+    inset: 12%;
+    border-radius: 24px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background-image:
+      linear-gradient(rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+    backdrop-filter: blur(1px);
+  }
+
+  @media (max-width: 1000px) {
     .auth-visual-section {
       display: none;
     }
 
     .auth-form-section {
-      padding: 24px;
+      padding: 40px;
     }
   }
 
